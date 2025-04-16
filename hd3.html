@@ -671,10 +671,9 @@
     <div class="MainBody">
         <div class="mainpro">
             <div class="pro">
-                <img id="pro-img" src="Images/curtain.jpeg" width="80%" id="pro-img">
+                <img id="pro-img" src="Images/curtain.jpeg" width="80%">
                 <div class="more-img">
                     <img src="Images/curtain.jpeg" class="small-img">
-
                     <img src="Images/hd3-1.webp" class="small-img">
                     <img src="Images/hd3-2.webp" class="small-img">
                 </div>
@@ -682,7 +681,7 @@
             <div class="detail">
                 <p> Home>Home Decor</p>
 
-                <h1 id=" product-name">Blooming Vines Floral Soft Pink Curtains Set Of 2</h1>
+                <h1 id="product-name">Blooming Vines Floral Soft Pink Curtains Set Of 2</h1>
                 <h4 id="product-price">RS 699/-</h4>
 
                 <input type="number" id="quantity" value="1" min="1">
@@ -795,8 +794,8 @@
             <a href="https://stripe.com/"><img src="Images/stripe.png"></i></a>
         </div>
     </div>
-
-    <script>
+   
+   <script>
         var proimg = document.getElementById("pro-img");
         var smallimg = document.getElementsByClassName("small-img");
         smallimg[0].onclick = function () {
@@ -808,6 +807,7 @@
         smallimg[2].onclick = function () {
             proimg.src = smallimg[2].src;
         }
+
 
         //when heart item is clicked
         document.querySelectorAll('.heart-icon-link').forEach(item => {
@@ -855,41 +855,54 @@
             });
         });
 
-        document.getElementById("add-to-cart").addEventListener("click", function (event) {
-            event.preventDefault();
+        document.addEventListener("DOMContentLoaded", function () {
+            const addToCartButton = document.getElementById("add-to-cart");
 
-            // Get product details
-            const productName = document.getElementById("product-name").innerText;
-            const productPrice = document.getElementById("product-price").innerText;
-            const productImage = document.getElementById("product-img").src;
-            const quantity = parseInt(document.getElementById("quantity").value);
-            // Prepare product object
-            const product = {
-                name: productName,
-                price: parseInt(productPrice.replace('RS ', '').replace('/-', '')),
-                imageUrl: productImage,
-                quantity: quantity
-            };
+            if (addToCartButton) {
+                addToCartButton.addEventListener("click", function (event) {
+                    console.log("Button clicked"); // Check if the button click is working
+                    event.preventDefault();
 
-            // Get existing cart from localStorage or initialize empty cart
-            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+                    // Get product details
+                    const productName = document.getElementById("product-name").innerText;
+                    const productPrice = document.getElementById("product-price").innerText;
+                    const productImage = document.getElementById("pro-img").src;
+                    const quantity = parseInt(document.getElementById("quantity").value);
 
-            // Check if the product already exists in the cart
-            const existingProductIndex = cart.findIndex(item => item.name === product.name);
+                    // Prepare product object
+                    const product = {
+                        name: productName,
+                        price: parseInt(productPrice.replace('RS ', '').replace('/-', '')),
+                        imageUrl: productImage,
+                        quantity: quantity
+                    };
 
-            if (existingProductIndex !== -1) {
-                // If the product exists, update the quantity
-                cart[existingProductIndex].quantity = parseInt(cart[existingProductIndex].quantity) + product.quantity;
+                    // Get existing cart from localStorage or initialize empty cart
+                    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+                    // Check if the product already exists in the cart
+                    const existingProductIndex = cart.findIndex(item => item.name === product.name);
+
+                    if (existingProductIndex !== -1) {
+                        // If the product exists, update the quantity
+                        cart[existingProductIndex].quantity = cart[existingProductIndex].quantity + product.quantity;
+                    } else {
+                        // If it's a new product, add it to the cart
+                        cart.push(product);
+                    }
+
+                    // Save updated cart to localStorage
+                    localStorage.setItem("cart", JSON.stringify(cart));
+
+                    alert("Item added to cart!");
+                });
             } else {
-                // If it's a new product, add it to the cart
-                cart.push(product);
+                console.log("Add to cart button not found");
             }
-            // Save updated cart to localStorage
-            localStorage.setItem("cart", JSON.stringify(cart));
-
-            alert("Item added to cart!");
         });
+
     </script>
+    
 </body>
 
 </html>
